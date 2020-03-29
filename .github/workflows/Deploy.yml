@@ -2,7 +2,8 @@ name: DeployALY
 
 on:
   push:
-    branches: [ '0.[0-9]+.x' ]
+    branches: 
+    - '0.[0-9]+.x'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
