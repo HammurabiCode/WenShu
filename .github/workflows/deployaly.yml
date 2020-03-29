@@ -18,15 +18,6 @@ jobs:
 
     - name: create tar
       run: |
-          tar czf $HOME/${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}-$GITHUB_RUN_NUMBER.tar.gz .
-          rm -rf *        
-          mv $HOME/${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}-$GITHUB_RUN_NUMBER.tar.gz .
+        ls
           
-    - name: Copy file
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.WEB_HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.WEB_PASSWORD }}
-        source: "."
-        target: "~/Project/${GITHUB_REPOSITORY##*/}"
+          
