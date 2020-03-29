@@ -1,0 +1,6 @@
+version: "3"
+services: 
+    wenshu: 
+        image: wenshu-0.1.x:latest
+        ports: 
+            - "5000:5000"
