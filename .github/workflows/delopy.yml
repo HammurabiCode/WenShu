@@ -3,7 +3,7 @@ name: deploy0.1.x
 on:
   push:
     branches: 
-      - 0.1.x
+      - 0.[0-9]+.x
 
 jobs:
   build:
@@ -33,6 +33,7 @@ jobs:
         host: ${{ secrets.WEB_HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.WEB_PASSWORD }}
+        envs: GITHUB_REPOSITORY,GITHUB_REF,GITHUB_RUN_NUMBER
         script: | 
           mkdir -p ~/Project/${GITHUB_REPOSITORY##*/}/src
           cd ~/Project/${GITHUB_REPOSITORY##*/}/src
