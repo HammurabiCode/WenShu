@@ -14,7 +14,9 @@ jobs:
 
     - name: tar src
       run: |
+        echo ${GITHUB_REF}
         tar czf $HOME/${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}-$GITHUB_RUN_NUMBER.tar.gz .
+        cat etc/uwsgi.py
         rm -rf *        
         mv $HOME/${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}-$GITHUB_RUN_NUMBER.tar.gz .
     - name: scp
