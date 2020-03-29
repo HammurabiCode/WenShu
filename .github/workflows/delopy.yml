@@ -13,4 +13,32 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Run a one-line script
-      run: ls
+      run: |
+        tar czf $HOME/${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}-$GITHUB_RUN_NUMBER.tar.gz .
+        rm -rf *        
+        mv $HOME/${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}-$GITHUB_RUN_NUMBER.tar.gz .
+    - name: Copy file
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.WEB_HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.WEB_PASSWORD }}
+        source: "."
+        target: "~/Project/${GITHUB_REPOSITORY##*/}"
+
+
+    - name: create folder
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.WEB_HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.WEB_PASSWORD }}
+        script: | 
+          mkdir -p ~/Project/${GITHUB_REPOSITORY##*/}/src
+          cd ~/Project/${GITHUB_REPOSITORY##*/}/src
+          tar xzf ../${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}-$GITHUB_RUN_NUMBER.tar.gz 
+          cp ../${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}-$GITHUB_RUN_NUMBER.tar.gz docker
+          cd docker 
+          docker build -t ${GITHUB_REPOSITORY##*/,,}-${GITHUB_REF##*/,,}-$GITHUB_RUN_NUMBER .
+          docker tag ${GITHUB_REPOSITORY##*/,,}-${GITHUB_REF##*/,,}-$GITHUB_RUN_NUMBER:latest ${GITHUB_REPOSITORY##*/,,}-${GITHUB_REF##*/,,}:latest
+          docker-compose up -d 
