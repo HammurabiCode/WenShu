@@ -1,8 +1,8 @@
-name: deploy
+name: DeployALY
 
 on:
   push:
-    branches: [ master, 0.1.x ]
+    branches: [ '0.[0-9]+.x' ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -13,21 +13,14 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-      with:
-        ref: 0.1.x
-    - name: Run a multi-line script
-      run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+
     - name: create tar
       run: |
-          tar czf $HOME/WenShu-$GITHUB_RUN_NUMBER.tar.gz .
+          tar czf $HOME/${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}-$GITHUB_RUN_NUMBER.tar.gz .
           rm -rf *        
-          mv $HOME/WenShu-$GITHUB_RUN_NUMBER.tar.gz .
-          ls
-          pwd
+          mv $HOME/${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}-$GITHUB_RUN_NUMBER.tar.gz .
+          
     - name: Copy file
       uses: appleboy/scp-action@master
       with:
@@ -35,4 +28,20 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.WEB_PASSWORD }}
         source: "."
-        target: "~/Project/WenShu"
+        target: "~/Project/${GITHUB_REPOSITORY##*/}"
+        
+    - name: create folder
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.WEB_HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.WEB_PASSWORD }}
+        script: | 
+          mkdir -p ~/Project/${GITHUB_REPOSITORY##*/}/src
+          cd ~/Project/${GITHUB_REPOSITORY##*/}/src
+          tar xzf ../${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}-$GITHUB_RUN_NUMBER.tar.gz 
+          cp ../${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}-$GITHUB_RUN_NUMBER.tar.gz docker
+          cd docker 
+          docker build -t ${GITHUB_REPOSITORY##*/,,}-${GITHUB_REF##*/,,}-$GITHUB_RUN_NUMBER .
+          docker tag ${GITHUB_REPOSITORY##*/,,}-${GITHUB_REF##*/,,}-$GITHUB_RUN_NUMBER:latest ${GITHUB_REPOSITORY##*/,,}-${GITHUB_REF##*/,,}:latest
+          docker-compose up -d
