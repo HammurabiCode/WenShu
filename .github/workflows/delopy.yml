@@ -39,7 +39,7 @@ jobs:
         script: | 
           mkdir -p ~/Project/WenShu/src && cd ~/Project/WenShu/src && rm -rf *
           export PROJECT_NAME=${GITHUB_REPOSITORY##*/}
-          export BRANCH_NAME=${##GITHUB_REF*/}
+          export BRANCH_NAME=${GITHUB_REF##*/}
           export TAR_NAME=${PROJECT_NAME}-${BRANCH_NAME}-$GITHUB_RUN_NUMBER.tar.gz 
           tar xzf ../${TAR_NAME}
           cd docker 
