@@ -39,9 +39,10 @@ jobs:
         script: | 
           mkdir -p ~/Project/${GITHUB_REPOSITORY##*/}/src
           cd ~/Project/${GITHUB_REPOSITORY##*/}/src
+          rm -rf *
           tar xzf ../${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}-$GITHUB_RUN_NUMBER.tar.gz 
-          cp ../${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}-$GITHUB_RUN_NUMBER.tar.gz docker
           cd docker 
+          cp ../../${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}-$GITHUB_RUN_NUMBER.tar.gz ${GITHUB_REPOSITORY##*/}.tar.gz
           docker build -t ${GITHUB_REPOSITORY##*/,,}-${GITHUB_REF##*/,,}-$GITHUB_RUN_NUMBER .
           docker tag ${GITHUB_REPOSITORY##*/,,}-${GITHUB_REF##*/,,}-$GITHUB_RUN_NUMBER:latest ${GITHUB_REPOSITORY##*/,,}-${GITHUB_REF##*/,,}:latest
           docker-compose up -d 
