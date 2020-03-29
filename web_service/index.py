@@ -7,7 +7,7 @@ bp = Blueprint('index', __name__, url_prefix='/index')
 
 @bp.route('')
 def index(): 
-    return 'Hello, World!'
+    return 'Hello, World One!'
     
     
 @bp.route('hi/<string:username>')
