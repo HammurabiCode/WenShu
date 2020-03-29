@@ -19,11 +19,12 @@ jobs:
         mv $HOME/${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}-$GITHUB_RUN_NUMBER.tar.gz .
     - name: Copy file
       uses: appleboy/scp-action@master
+      env: 
+        GITHUB_REPOSITORY: ${GITHUB_REPOSITORY}
       with:
         host: ${{ secrets.WEB_HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.WEB_PASSWORD }}
-        envs: GITHUB_REPOSITORY,GITHUB_REF,GITHUB_RUN_NUMBER
         source: "."
         target: "~/Project/${GITHUB_REPOSITORY##*/}/"
 
