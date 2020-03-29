@@ -1,9 +1,9 @@
-name: DeployALY
+name: deploy
 
 on:
   push:
     branches: 
-    - '0.1.x'
+    - 0.1.x
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -31,18 +31,4 @@ jobs:
         source: "."
         target: "~/Project/${GITHUB_REPOSITORY##*/}"
         
-    - name: create folder
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.WEB_HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.WEB_PASSWORD }}
-        script: | 
-          mkdir -p ~/Project/${GITHUB_REPOSITORY##*/}/src
-          cd ~/Project/${GITHUB_REPOSITORY##*/}/src
-          tar xzf ../${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}-$GITHUB_RUN_NUMBER.tar.gz 
-          cp ../${GITHUB_REPOSITORY##*/}-${GITHUB_REF##*/}-$GITHUB_RUN_NUMBER.tar.gz docker
-          cd docker 
-          docker build -t ${GITHUB_REPOSITORY##*/,,}-${GITHUB_REF##*/,,}-$GITHUB_RUN_NUMBER .
-          docker tag ${GITHUB_REPOSITORY##*/,,}-${GITHUB_REF##*/,,}-$GITHUB_RUN_NUMBER:latest ${GITHUB_REPOSITORY##*/,,}-${GITHUB_REF##*/,,}:latest
-          docker-compose up -d
+
