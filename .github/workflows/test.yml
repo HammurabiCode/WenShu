@@ -10,6 +10,7 @@ jobs:
   build:
     env:
       PROJECT_NAME: wenshu
+      BRANCH_NAME: ${GITHUB_REF##*/}
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -19,11 +20,11 @@ jobs:
     # Runs a single command using the runners shell
     - name: print env
       run: |
-        echo GITHUB_REF $GITHUB_REF
+        echo GITHUB_REF $GITHUB_REF ${GITHUB_REF##*/}
         echo GITHUB_REPOSITORY $GITHUB_REPOSITORY
         echo GITHUB_EVENT_NAME $GITHUB_EVENT_NAME
         echo $PROJECT_NAME
       
     - name: checkout
       with:
-        ref: $GITHUB_REF
+        ref: ${BRANCH_NAME}
