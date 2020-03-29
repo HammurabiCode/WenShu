@@ -23,6 +23,7 @@ jobs:
         host: ${{ secrets.WEB_HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.WEB_PASSWORD }}
+        envs: GITHUB_REPOSITORY,GITHUB_REF,GITHUB_RUN_NUMBER
         source: "."
         target: "~/Project/${GITHUB_REPOSITORY##*/}/"
 
