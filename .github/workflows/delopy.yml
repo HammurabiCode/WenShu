@@ -24,7 +24,7 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.WEB_PASSWORD }}
         source: "."
-        target: "~/Project/${GITHUB_REPOSITORY##*/}"
+        target: "~/Project/${GITHUB_REPOSITORY##*/}/"
 
 
     - name: create folder
