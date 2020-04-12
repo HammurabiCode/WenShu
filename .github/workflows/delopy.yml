@@ -46,8 +46,8 @@ jobs:
           tar xzf ../${TAR_NAME}
           cd docker 
           cp ../../${TAR_NAME} ${PROJECT_NAME}.tar.gz
-          export IMAGE_NAME=${PROJECT_NAME,,}/${BRANCH_NAME,,}:$GITHUB_RUN_NUMBER 
+          export IMAGE_NAME=${PROJECT_NAME,,}-${BRANCH_NAME,,}:$GITHUB_RUN_NUMBER
           docker build -t ${IMAGE_NAME} .
-          docker tag ${IMAGE_NAME} ${PROJECT_NAME,,}/${BRANCH_NAME,,}:latest
+          docker tag ${IMAGE_NAME} ${PROJECT_NAME,,}-${BRANCH_NAME,,}:latest
           docker-compose up -d 
           echo ${IMAGE_NAME} ${GITHUB_SHA} `date`
