@@ -4,3 +4,4 @@ services:
         image: wenshu-0.1.x:latest
         ports: 
             - "8080:8080"
+        container_name: hammurabi-wenshu

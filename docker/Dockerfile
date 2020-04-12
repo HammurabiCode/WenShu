@@ -4,7 +4,8 @@ WORKDIR /hammurabi/WenShu
 
 COPY WenShu.tar.gz /hammurabi/WenShu
 
-RUN tar xzf WenShu.tar.gz
+RUN pip install flask_restful==0.3.8 && \
+tar xzf WenShu.tar.gz
 
 
 CMD python etc/uwsgi.py |  uwsgi --ini - 
